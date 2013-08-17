@@ -1,0 +1,2 @@
+#!/bin/sh
+sudo chef-solo -c chefsoloconfig.rb -j roles/czchen.json
