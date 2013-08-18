@@ -1,6 +1,7 @@
 {
     "name": "czchen",
     "run_list": [
-        "czchen::package"
+        "czchen::package",
+        "czchen::user"
     ]
 }
