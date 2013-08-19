@@ -1,7 +1,7 @@
 {
     "name": "czchen",
     "run_list": [
-        "czchen::package",
-        "czchen::user"
+        "recipe[czchen::package]",
+        "recipe[czchen::user]"
     ]
 }
