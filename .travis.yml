@@ -11,3 +11,5 @@ script:
 
 after_failure:
     -   ls -l /home/czchen
+    -   ls -l /home
+    -   cat /etc/passwd
