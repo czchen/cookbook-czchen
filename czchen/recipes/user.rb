@@ -38,7 +38,6 @@ git node[:user][:dotfiles] do
 end
 
 execute 'deploy dotfiles' do
-    action :nothing
     user node[:user][:user]
     group node[:user][:group]
     cwd node[:user][:dotfiles]
