@@ -44,3 +44,11 @@ execute 'deploy dotfiles' do
     command './deploy'
     subscribes :run, resources(:git => node[:user][:dotfiles])
 end
+
+execute 'setup vim' do
+    user node[:user][:user]
+    group node[:user][:group]
+    cwd node[:user][:home]
+    command 'vim +BundleInstall +qall'
+    subscribes :run, resources(:execute => 'deploy dotfiles')
+end
