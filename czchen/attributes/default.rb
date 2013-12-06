@@ -10,6 +10,7 @@ default[:package][:system] = %w(
     manpages-dev
     manpages-posix
     manpages-posix-dev
+    mutt-patched
     npm
     python-pip
     ruby
