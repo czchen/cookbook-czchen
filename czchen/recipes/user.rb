@@ -60,7 +60,7 @@ execute 'deploy vcsh' do
     group node[:user][:group]
 
     vcsh_repo.each do |key, value|
-        command "vcsh clone #{value} #{key.to_s}"
+        command "vcsh clone #{value} #{key.to_s} ; true"
     end
     not_if { vcsh_repo.empty? }
 end
@@ -69,7 +69,7 @@ execute 'setup vim' do
     user node[:user][:user]
     group node[:user][:group]
     cwd node[:user][:home]
-    command 'vim +BundleInstall +qall'
+    command 'vim +BundleInstall +qall ; true'
     subscribes :run, resources(:execute => 'deploy vcsh')
 end
 
