@@ -19,6 +19,15 @@ node[:package][:vcsh].each do |key, value|
     end
 end
 
+node[:package][:vcsh].each do |key, value|
+    execute "write-gitignore #{key}.vcsh" do
+        user node[:user][:user]
+        group node[:user][:group]
+        command "vcsh write-gitignore #{key.to_s}"
+        subscribes :run, resources(:execute => "deploy #{key}.vcsh")
+    end
+end
+
 execute 'setup vim' do
     user node[:user][:user]
     group node[:user][:group]
