@@ -2,9 +2,9 @@ require_package = %w(
     git
     npm
     python-pip
-    python3
     ruby
     sudo
+    vcsh
     vim-gnome
     zsh
 )
@@ -16,6 +16,7 @@ pip_package = %w(
 )
 
 gem_package = %w(
+    tmuxinator
 )
 
 npm_package = %w(
@@ -24,21 +25,28 @@ npm_package = %w(
     npm
 )
 
+vcsh_repo = {
+    :bzr             => 'https://github.com/czchen/bzr.vcsh',
+    :debian          => 'https://github.com/czchen/debian.vcsh',
+    :gdb             => 'https://github.com/czchen/gdb.vcsh',
+    :gem             => 'https://github.com/czchen/gem.vcsh',
+    :git             => 'https://github.com/czchen/git.vcsh',
+    :gpg             => 'https://github.com/czchen/gpg.vcsh',
+    :hg              => 'https://github.com/czchen/hg.vcsh',
+    :mutt            => 'https://github.com/czchen/mutt.vcsh',
+    :npm             => 'https://github.com/czchen/npm.vcsh',
+    :python          => 'https://github.com/czchen/python.vcsh',
+    :rime            => 'https://github.com/czchen/rime.vcsh',
+    'sublime-text-3' => 'https://github.com/czchen/sublime-text-3.vcsh',
+    :tmux            => 'https://github.com/czchen/tmux.vcsh',
+    :vim             => 'https://github.com/czchen/vim.vcsh',
+    :zsh             => 'https://github.com/czchen/zsh.vcsh',
+}
+
 require_package.each do |package_name|
     package package_name do
         action :install
     end
-end
-
-group node[:user][:group] do
-    action :create
-end
-
-user node[:user][:user] do
-    action :create
-    home node[:user][:home]
-    gid node[:user][:group]
-    shell node[:user][:shell]
 end
 
 group 'sudo' do
@@ -47,20 +55,14 @@ group 'sudo' do
     append true
 end
 
-git node[:user][:dotfiles] do
-    action :sync
+execute 'deploy vcsh' do
     user node[:user][:user]
     group node[:user][:group]
-    repository node[:user][:repository][:https]
-    enable_submodules true
-end
 
-execute 'deploy dotfiles' do
-    user node[:user][:user]
-    group node[:user][:group]
-    cwd node[:user][:dotfiles]
-    command './deploy'
-    subscribes :run, resources(:git => node[:user][:dotfiles])
+    vcsh_repo.each do |key, value|
+        command "vcsh clone #{value} #{key.to_s}"
+    end
+    not_if { vcsh_repo.empty? }
 end
 
 execute 'setup vim' do
@@ -68,7 +70,7 @@ execute 'setup vim' do
     group node[:user][:group]
     cwd node[:user][:home]
     command 'vim +BundleInstall +qall'
-    subscribes :run, resources(:execute => 'deploy dotfiles')
+    subscribes :run, resources(:execute => 'deploy vcsh')
 end
 
 execute 'setup python' do
@@ -81,8 +83,7 @@ execute 'setup python' do
     end
     not_if { pip_package.empty? }
 
-    subscribes :run, resources(:execute => 'deploy dotfiles')
-    # FIXME: remove global python-pip in favor of local pip
+    subscribes :run, resources(:execute => 'deploy vcsh')
 end
 
 execute 'setup ruby' do
@@ -95,7 +96,7 @@ execute 'setup ruby' do
     end
     not_if { gem_package.empty? }
 
-    subscribes :run, resources(:execute => 'deploy dotfiles')
+    subscribes :run, resources(:execute => 'deploy vcsh')
 end
 
 execute 'setup nodejs' do
@@ -108,6 +109,5 @@ execute 'setup nodejs' do
     end
     not_if { npm_package.empty? }
 
-    subscribes :run, resources(:execute => 'deploy dotfiles')
-    # FIXME: remove global npm in favor of local npm
+    subscribes :run, resources(:execute => 'deploy vcsh')
 end
