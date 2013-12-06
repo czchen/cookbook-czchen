@@ -55,14 +55,13 @@ group 'sudo' do
     append true
 end
 
-execute 'deploy vcsh' do
-    user node[:user][:user]
-    group node[:user][:group]
-
-    vcsh_repo.each do |key, value|
-        command "vcsh clone #{value} #{key.to_s} ; true"
+vcsh_repo.each do |key, value|
+    execute "deploy #{key}.vcsh" do
+        user node[:user][:user]
+        group node[:user][:group]
+        command "vcsh clone #{value} #{key.to_s}"
+        ignore_failure true
     end
-    not_if { vcsh_repo.empty? }
 end
 
 execute 'setup vim' do
@@ -70,7 +69,7 @@ execute 'setup vim' do
     group node[:user][:group]
     cwd node[:user][:home]
     command 'vim +BundleInstall +qall ; true'
-    subscribes :run, resources(:execute => 'deploy vcsh')
+    subscribes :run, resources(:execute => 'deploy vim.vcsh')
 end
 
 execute 'setup python' do
@@ -83,7 +82,7 @@ execute 'setup python' do
     end
     not_if { pip_package.empty? }
 
-    subscribes :run, resources(:execute => 'deploy vcsh')
+    subscribes :run, resources(:execute => 'deploy python.vcsh')
 end
 
 execute 'setup ruby' do
@@ -96,7 +95,7 @@ execute 'setup ruby' do
     end
     not_if { gem_package.empty? }
 
-    subscribes :run, resources(:execute => 'deploy vcsh')
+    subscribes :run, resources(:execute => 'deploy gem.vcsh')
 end
 
 execute 'setup nodejs' do
@@ -109,5 +108,5 @@ execute 'setup nodejs' do
     end
     not_if { npm_package.empty? }
 
-    subscribes :run, resources(:execute => 'deploy vcsh')
+    subscribes :run, resources(:execute => 'deploy npm.vcsh')
 end
