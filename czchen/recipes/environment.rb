@@ -54,3 +54,5 @@ node[:package][:npm].each do |item|
         subscribes :run, resources(:execute => 'deploy npm.vcsh')
     end
 end
+
+# FIXME: Install node.js by npm n
