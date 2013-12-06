@@ -4,12 +4,6 @@ node[:package][:system].each do |item|
     end
 end
 
-group 'sudo' do
-    action :modify
-    members node[:user][:user]
-    append true
-end
-
 node[:package][:vcsh].each do |key, value|
     execute "deploy #{key}.vcsh" do
         user node[:user][:user]
