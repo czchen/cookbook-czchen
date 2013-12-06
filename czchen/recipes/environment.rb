@@ -29,7 +29,7 @@ execute 'setup vim' do
 end
 
 node[:package][:pip].each do |item|
-    execute item do
+    execute "pip #{item}" do
         user node[:user][:user]
         group node[:user][:group]
         command "echo pip install --upgrade --force-reinstall #{item}"
@@ -38,7 +38,7 @@ node[:package][:pip].each do |item|
 end
 
 node[:package][:gem].each do |item|
-    execute item do
+    execute "gem #{item}" do
         user node[:user][:user]
         group node[:user][:group]
         command "gem install #{item}"
@@ -47,7 +47,7 @@ node[:package][:gem].each do |item|
 end
 
 node[:package][:npm].each do |item|
-    execute item do
+    execute "npm #{item}" do
         user node[:user][:user]
         group node[:user][:group]
         command "npm install -g #{item}"
