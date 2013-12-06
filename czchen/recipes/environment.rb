@@ -1,5 +1,10 @@
-require_package = %w(
+package = %w(
+    build-essential
     git
+    manpages
+    manpages-dev
+    manpages-posix
+    manpages-posix-dev
     npm
     python-pip
     ruby
@@ -43,7 +48,7 @@ vcsh_repo = {
     :zsh             => 'https://github.com/czchen/zsh.vcsh',
 }
 
-require_package.each do |package_name|
+package.each do |package_name|
     package package_name do
         action :install
     end
