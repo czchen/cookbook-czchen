@@ -63,12 +63,14 @@ node[:package][:gem].each do |item|
 end
 
 
-directory node[:package][:config][:npm][:prefix] do
-    owner node[:user][:user]
-    group node[:user][:group]
-    mode 00644
-    action :create
-    subscribes :run, resources(:execute => 'deploy npm.vcsh')
+if not node[:package][:npm].empty?
+    directory node[:package][:config][:npm][:prefix] do
+        owner node[:user][:user]
+        group node[:user][:group]
+        mode 00644
+        action :create
+        subscribes :run, resources(:execute => 'deploy npm.vcsh')
+    end
 end
 
 node[:package][:npm].each do |item|
