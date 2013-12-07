@@ -15,6 +15,7 @@ else
 end
 
 default[:package][:system] = %w(
+    autojump
     build-essential
     git
     manpages
@@ -23,6 +24,7 @@ default[:package][:system] = %w(
     manpages-posix-dev
     mutt-patched
     npm
+    p7zip-full
     python-pip
     ruby
     sudo
