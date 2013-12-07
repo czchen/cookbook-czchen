@@ -67,7 +67,7 @@ if not node[:package][:npm].empty?
     directory node[:package][:config][:npm][:prefix] do
         owner node[:user][:user]
         group node[:user][:group]
-        mode 00644
+        mode 0600
         action :create
         subscribes :run, resources(:execute => 'deploy npm.vcsh')
     end
