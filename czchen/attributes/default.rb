@@ -1,7 +1,18 @@
-default[:user] = {
-    :user  => 'czchen',
-    :group => 'czchen',
-}
+if ENV.has_key? 'TRAVIS'
+    default[:user] = {
+        :user  => 'travis',
+        :group => 'travis',
+        :home  => '/home/travis',
+        :shell => '/bin/bash',
+    }
+else
+    default[:user] = {
+        :user  => 'czchen',
+        :group => 'czchen',
+        :home  => '/home/czchen',
+        :shell => '/bin/zsh',
+    }
+end
 
 default[:package][:system] = %w(
     build-essential
@@ -53,3 +64,4 @@ default[:package][:npm] = %w(
     n
     npm
 )
+default[:package][:config][:npm][:prefix] = "#{default[:user][:home]}/.local"

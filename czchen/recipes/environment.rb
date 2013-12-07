@@ -4,23 +4,17 @@ node[:package][:system].each do |item|
     end
 end
 
-if not ENV.has_key? 'TRAVIS'
-    user node[:user][:user] do
-        action :create
-        home node[:user][:home]
-        gid node[:user][:group]
-        shell node[:user][:shell]
-    end
+user node[:user][:user] do
+    action :create
+    home node[:user][:home]
+    gid node[:user][:group]
+    shell node[:user][:shell]
+end
 
-    group 'sudo' do
-        action :modify
-        members node[:user][:user]
-        append true
-    end
-else
-    node.default[:user][:user]  = 'travis'
-    node.default[:user][:group] = 'travis'
-    node.default[:user][:home]  = '/home/travis'
+group 'sudo' do
+    action :modify
+    members node[:user][:user]
+    append true
 end
 
 node[:package][:vcsh].each do |key, value|
@@ -63,7 +57,7 @@ node[:package][:gem].each do |item|
     execute "gem #{item}" do
         user node[:user][:user]
         group node[:user][:group]
-        command "gem install #{item}"
+        command "gem install --user-install #{item}"
         subscribes :run, resources(:execute => 'deploy gem.vcsh')
     end
 end
@@ -72,7 +66,7 @@ node[:package][:npm].each do |item|
     execute "npm #{item}" do
         user node[:user][:user]
         group node[:user][:group]
-        command "npm install -g #{item}"
+        command "npm install --folder #{node[:package][:config][:npm][:prefix]} #{item}"
         subscribes :run, resources(:execute => 'deploy npm.vcsh')
     end
 end
