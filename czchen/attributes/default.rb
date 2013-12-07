@@ -62,9 +62,13 @@ default[:package][:gem] = %w(
     tmuxinator
 )
 
-default[:package][:npm] = %w(
-    LiveScript
-    n
-    npm
-)
-default[:package][:config][:npm][:prefix] = "#{default[:user][:home]}/.local"
+if ENV.has_key? 'TRAVIS'
+    default[:package][:npm] = []
+else
+    default[:package][:npm] = %w(
+        LiveScript
+        n
+        npm
+    )
+    default[:package][:config][:npm][:prefix] = "#{default[:user][:home]}/.local"
+end
