@@ -17,6 +17,7 @@ end
 default[:package][:system] = %w(
     autojump
     build-essential
+    cmake
     git
     manpages
     manpages-dev
