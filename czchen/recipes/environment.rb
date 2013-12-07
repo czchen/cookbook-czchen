@@ -4,6 +4,13 @@ node[:package][:system].each do |item|
     end
 end
 
+user node[:user][:user] do
+    action :create
+    home node[:user][:home]
+    gid node[:user][:group]
+    shell node[:user][:shell]
+end
+
 node[:package][:vcsh].each do |key, value|
     execute "deploy #{key}.vcsh" do
         user node[:user][:user]
