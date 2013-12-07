@@ -71,5 +71,5 @@ else
         n
         npm
     )
-    default[:package][:config][:npm][:prefix] = "#{default[:user][:home]}/.local"
 end
+default[:package][:config][:npm][:prefix] = "#{default[:user][:home]}/.local"
