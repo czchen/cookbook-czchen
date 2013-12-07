@@ -62,12 +62,21 @@ node[:package][:gem].each do |item|
     end
 end
 
+
+directory node[:package][:config][:npm][:prefix] do
+    owner node[:user][:user]
+    group node[:user][:group]
+    mode 00644
+    action :create
+    subscribes :run, resources(:execute => 'deploy npm.vcsh')
+end
+
 node[:package][:npm].each do |item|
     execute "npm #{item}" do
         user node[:user][:user]
         group node[:user][:group]
         command "npm_config_prefix=#{node[:package][:config][:npm][:prefix]} npm install -g #{item}"
-        subscribes :run, resources(:execute => 'deploy npm.vcsh')
+        subscribes :run, resources(:directory => node[:package][:config][:npm][:prefix])
     end
 end
 
