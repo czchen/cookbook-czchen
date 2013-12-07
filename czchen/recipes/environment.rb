@@ -66,7 +66,7 @@ node[:package][:npm].each do |item|
     execute "npm #{item}" do
         user node[:user][:user]
         group node[:user][:group]
-        command "npm install -g --folder #{node[:package][:config][:npm][:prefix]} #{item}"
+        command "npm_config_prefix=#{node[:package][:config][:npm][:prefix]} npm install -g #{item}"
         subscribes :run, resources(:execute => 'deploy npm.vcsh')
     end
 end
