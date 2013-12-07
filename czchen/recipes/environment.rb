@@ -18,9 +18,9 @@ if not ENV.has_key? 'TRAVIS'
         append true
     end
 else
-    node[:user][:user]  = 'travis'
-    node[:user][:group] = 'travis'
-    node[:user][:home]  = '/home/travis'
+    node.default[:user][:user]  = 'travis'
+    node.default[:user][:group] = 'travis'
+    node.default[:user][:home]  = '/home/travis'
 end
 
 node[:package][:vcsh].each do |key, value|
