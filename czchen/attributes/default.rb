@@ -19,6 +19,7 @@ default[:package][:system] = %w(
     build-essential
     cmake
     git
+    ibus-chewing
     manpages
     manpages-dev
     manpages-posix
