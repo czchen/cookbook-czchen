@@ -4,17 +4,23 @@ node[:package][:system].each do |item|
     end
 end
 
-user node[:user][:user] do
-    action :create
-    home node[:user][:home]
-    gid node[:user][:group]
-    shell node[:user][:shell]
-end
+if not ENV.has_key? 'TRAVIS'
+    user node[:user][:user] do
+        action :create
+        home node[:user][:home]
+        gid node[:user][:group]
+        shell node[:user][:shell]
+    end
 
-group 'sudo' do
-    action :modify
-    members node[:user][:user]
-    append true
+    group 'sudo' do
+        action :modify
+        members node[:user][:user]
+        append true
+    end
+else
+    node[:user][:user]  = 'travis'
+    node[:user][:group] = 'travis'
+    node[:user][:home]  = '/home/travis'
 end
 
 node[:package][:vcsh].each do |key, value|
