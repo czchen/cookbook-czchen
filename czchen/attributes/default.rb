@@ -29,6 +29,7 @@ default[:package][:system] = %w(
     python-pip
     ruby
     sudo
+    tree
     vcsh
     vim-gnome
     zsh
