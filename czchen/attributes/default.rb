@@ -18,7 +18,10 @@ default[:package][:system] = %w(
     autojump
     build-essential
     cmake
+    debhelper
+    devscripts
     git
+    gufw
     ibus-chewing
     manpages
     manpages-dev
